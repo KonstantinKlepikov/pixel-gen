@@ -1,0 +1,81 @@
+[tool.poetry]
+name = "pixel-gen"
+version = "0.0.1"
+description = "pixel-gen"
+authors = ["Konstantin Klepikov <oformleno@gmail.com"]
+license = "MIT"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = ">=3.12, <4.0"
+PyYAML = "^6.0"
+python-dotenv = "^1.0.1"
+click = "^8.1.7"
+requests = "^2.32.3"
+diffusers = "^0.31.0"
+torch = "^2.5.1"
+torchvision = "^0.20.1"
+torchaudio = "^2.5.1"
+transformers = "^4.47.1"
+accelerate = "^1.2.1"
+peft = "^0.14.0"
+
+
+[tool.poetry.group.dev.dependencies]
+# tests
+pytest = "^8.3.3"
+pytest-asyncio = "^0.21.1"
+# lint
+flake8 = "^6.1.0"
+flake8-broken-line = "^1.0.0"
+flake8-return = "^1.2.0"
+flake8-isort = "^6.1.1"
+flake8-quotes = "^3.3.2"
+flake8-bugbear = "^23.9.16"
+flake8-pyproject = "^1.2.3"
+pep8-naming = "^0.13.3"
+mypy = "^1.13.0"
+ruff = "^0.7.2"
+types-pyyaml = "^6.0.12.2"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+
+[tool.blue]
+line-length = 88
+preview = true
+
+
+[tool.isort]
+profile = "black"
+
+
+[tool.flake8]
+max-line-length = 88
+max-complexity = 10
+extend-immutable-calls = ["Depends"]
+
+[tool.ruff]
+line-length = 88
+
+
+[tool.ruff.format]
+quote-style = "single"
+
+
+[tool.mypy]
+check_untyped_defs = true
+mypy_path = ["src", "tests"]
+ignore_missing_imports = true
+
+
+[tool.pytest.ini_options]
+pythonpath = ["app", "src"]
+python_files = "test_*.py"
+testpaths = "tests"
+norecursedirs = ["venv*", ".venv"]
+addopts = "-v -x -s -p no:warnings"
+asyncio_mode = "auto"
