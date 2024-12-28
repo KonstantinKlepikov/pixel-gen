@@ -169,3 +169,5 @@ logs
 poetry.toml
 results/*.*
 !results/.gitkeep
+examples/*.*
+!exampales/.gitkeep

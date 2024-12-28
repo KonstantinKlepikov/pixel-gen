@@ -32,10 +32,12 @@ pipe.load_lora_weights(
 pipe.set_adapters(['lora', 'pixel'], adapter_weights=[1.0, 1.2])
 pipe.to(device='cuda', dtype=torch.float16)
 
-prompt = 'pixel, an astronaut riding a horse, shine color palette'
+prompt = (
+    'christmas tree, presents under it and happy plumber mario, pixelart, isometric'
+)
 negative_prompt = '3d render, realistic'
 
-num_images = 1
+num_images = 10
 
 for _ in range(num_images):
     image = pipe(
