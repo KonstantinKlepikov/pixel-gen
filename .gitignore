@@ -167,7 +167,7 @@ logs
 # CurrentProject
 /tests/temp
 poetry.toml
-results/*.*
+results/
 !results/.gitkeep
-examples/*.*
+examples/
 !exampales/.gitkeep

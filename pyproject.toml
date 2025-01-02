@@ -1,10 +1,16 @@
 [tool.poetry]
-name = "pixel-gen"
+name = "pixel_gen"
 version = "0.0.1"
-description = "pixel-gen"
-authors = ["Konstantin Klepikov <oformleno@gmail.com"]
+description = "pixel_gen"
+authors = ["Konstantin Klepikov <oformleno@gmail.com>"]
 license = "MIT"
 readme = "README.md"
+packages = [
+    {include = "*", from="src"}
+]
+
+[tool.poetry.scripts]
+generate = "pixel_gen.pixgen:generate"
 
 [tool.poetry.dependencies]
 python = ">=3.12, <4.0"
@@ -20,6 +26,8 @@ transformers = "^4.47.1"
 accelerate = "^1.2.1"
 peft = "^0.14.0"
 pyxelate = {git = "https://github.com/sedthh/pyxelate.git"}
+pixelate = "^1.0.0"
+matplotlib = "^3.10.0"
 
 
 [tool.poetry.group.dev.dependencies]
