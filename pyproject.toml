@@ -28,6 +28,9 @@ peft = "^0.14.0"
 pyxelate = {git = "https://github.com/sedthh/pyxelate.git"}
 pixelate = "^1.0.0"
 matplotlib = "^3.10.0"
+ftfy = "^6.3.1"
+scipy = "^1.15.0"
+ipykernel = "^6.29.5"
 
 
 [tool.poetry.group.dev.dependencies]

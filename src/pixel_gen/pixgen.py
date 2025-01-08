@@ -34,7 +34,7 @@ pipe.to(device='cuda', dtype=torch.float16)
     prompt='Your prompt',
 )
 def generate(count: int, prompt: str):
-    dt = f'{datetime.datetime.now().strftime("%H:%M:%S_%Y-%m-%d")}'
+    dt = f'{datetime.datetime.now().strftime("%Y-%m-%d_%H:%M:%S")}'
     p = DEST_PATH / dt
     p.mkdir()
 

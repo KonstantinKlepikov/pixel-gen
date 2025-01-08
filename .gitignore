@@ -171,3 +171,4 @@ results/
 !results/.gitkeep
 examples/
 !exampales/.gitkeep
+research/howto/*.png
