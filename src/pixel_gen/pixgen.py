@@ -26,6 +26,7 @@ pipe.to(device='cuda', dtype=torch.float16)
 
 @click.command()
 @click.option('--count', default=1, help='Number of generated images')
+@click.option('--steps', default=8, help='Number of inference steps')
 @click.option(
     '--prompt',
     default=(
@@ -33,7 +34,7 @@ pipe.to(device='cuda', dtype=torch.float16)
     ),
     prompt='Your prompt',
 )
-def generate(count: int, prompt: str):
+def generate(count: int, prompt: str, steps: int):
     dt = f'{datetime.datetime.now().strftime("%Y-%m-%d_%H:%M:%S")}'
     p = DEST_PATH / dt
     p.mkdir()
@@ -45,7 +46,7 @@ def generate(count: int, prompt: str):
         image = pipe(
             prompt=(prompt),
             negative_prompt=NEGATIVE_PROMPT,
-            num_inference_steps=8,
+            num_inference_steps=steps,
             guidance_scale=1.5,
         ).images[0]
 

@@ -17,15 +17,17 @@ pipe.enable_model_cpu_offload()
 # prepare image
 init_image = load_image(Image.open('examples/hero_001.jpg'))
 
-prompt = 'Pixelart man colored by bright colors and with a tape recorder'
-negative_prompt = '3d render, realistic'
+prompt = 'Man with a tape recorder colored by bright colors'
+negative_prompt = '3d render, ugly, deformed, disfigured, poor details, bad anatomy'
 
 # pass prompt and image to pipeline
 image = pipe(
     prompt,
     image=init_image,
     negative_prompt=negative_prompt,
-    strength=0.51,
+    guidance_scale=6.0,
+    strength=1,
+    num_inference_steps=70,
 ).images[0]
 image.save(
     'results/img_to_img_pixel_art_xl_'
