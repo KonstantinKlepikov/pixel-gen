@@ -33,3 +33,7 @@ virtualenvs.create = true
 virtualenvs.prefer-active-python = true
 # ... some other variables
 ```
+
+## Run
+
+`generate --count=10 --prompt="The small agressive robot with tentacles, pixelart"`

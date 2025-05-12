@@ -1,6 +1,7 @@
 # https://huggingface.co/nerijs/pixel-art-xl
 import datetime
 import pathlib
+from functools import lru_cache
 
 import click
 import torch
@@ -12,16 +13,20 @@ NEGATIVE_PROMPT = '3d render, realistic'
 DEST_PATH = pathlib.Path('results/')
 
 
-pipe = DiffusionPipeline.from_pretrained(MODEL_ID, variant='fp16')
-pipe.scheduler = LCMScheduler.from_config(pipe.scheduler.config)
+@lru_cache
+def get_pipe():
+    pipe = DiffusionPipeline.from_pretrained(MODEL_ID, variant='fp16')
+    pipe.scheduler = LCMScheduler.from_config(pipe.scheduler.config)
 
-pipe.load_lora_weights(LORA_ID, adapter_name='lora')
-pipe.load_lora_weights(
-    'nerijs/pixel-art-xl', weight_name='pixel-art-xl.safetensors', adapter_name='pixel'
-)
+    pipe.load_lora_weights(LORA_ID, adapter_name='lora')
+    pipe.load_lora_weights(
+        'nerijs/pixel-art-xl',
+        weight_name='pixel-art-xl.safetensors',
+        adapter_name='pixel',
+    )
 
-pipe.set_adapters(['lora', 'pixel'], adapter_weights=[1.0, 1.2])
-pipe.to(device='cuda', dtype=torch.float16)
+    pipe.set_adapters(['lora', 'pixel'], adapter_weights=[1.0, 1.2])
+    return pipe
 
 
 @click.command()
@@ -35,6 +40,9 @@ pipe.to(device='cuda', dtype=torch.float16)
     prompt='Your prompt',
 )
 def generate(count: int, prompt: str, steps: int):
+    pipe = get_pipe()
+    pipe.to(device='cuda', dtype=torch.float16)
+
     dt = f'{datetime.datetime.now().strftime("%Y-%m-%d_%H:%M:%S")}'
     p = DEST_PATH / dt
     p.mkdir()
