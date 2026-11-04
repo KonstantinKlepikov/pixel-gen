@@ -1,37 +1,36 @@
-# https://huggingface.co/nerijs/pixel-art-xl
 import datetime
-import pathlib
-from functools import lru_cache
+from enum import Enum, member
 
 import click
 import torch
-from diffusers import DiffusionPipeline, LCMScheduler
 
-MODEL_ID = 'stabilityai/stable-diffusion-xl-base-1.0'
-LORA_ID = 'latent-consistency/lcm-lora-sdxl'
-NEGATIVE_PROMPT = '3d render, realistic'
-DEST_PATH = pathlib.Path('results/')
+from .constants import DEST_PATH, NEGATIVE_PROMPT
+from .pill_pixelating import pixelate
+from .pixel_art_xl import get_pipe as art_pipe
+from .pixel_party_xl import get_pipe as party_pipe
 
 
-@lru_cache
-def get_pipe():
-    pipe = DiffusionPipeline.from_pretrained(MODEL_ID, variant='fp16')
-    pipe.scheduler = LCMScheduler.from_config(pipe.scheduler.config)
-
-    pipe.load_lora_weights(LORA_ID, adapter_name='lora')
-    pipe.load_lora_weights(
-        'nerijs/pixel-art-xl',
-        weight_name='pixel-art-xl.safetensors',
-        adapter_name='pixel',
-    )
-
-    pipe.set_adapters(['lora', 'pixel'], adapter_weights=[1.0, 1.2])
-    return pipe
+class DiffusionModel(Enum):
+    ART = member(art_pipe)
+    PARTY = member(party_pipe)
 
 
 @click.command()
 @click.option('--count', default=1, help='Number of generated images')
 @click.option('--steps', default=8, help='Number of inference steps')
+@click.option(
+    '--cfg',
+    type=click.FLOAT,
+    default=1.5,
+    help='How closely the model follows the prompt. Typically between 5.0 and 12.0',
+)
+@click.option('-pill', is_flag=True, help='Use PILL pixelating')
+@click.option(
+    '--model',
+    type=click.Choice(DiffusionModel, case_sensitive=False),
+    default=DiffusionModel.ART,
+    help='Available Model',
+)
 @click.option(
     '--prompt',
     default=(
@@ -39,8 +38,15 @@ def get_pipe():
     ),
     prompt='Your prompt',
 )
-def generate(count: int, prompt: str, steps: int):
-    pipe = get_pipe()
+def generate(
+    count: int,
+    prompt: str,
+    steps: int,
+    pill: bool,
+    cfg: float,
+    model: DiffusionModel,
+):
+    pipe = model.value()
     pipe.to(device='cuda', dtype=torch.float16)
 
     dt = f'{datetime.datetime.now().strftime("%Y-%m-%d_%H:%M:%S")}'
@@ -55,10 +61,13 @@ def generate(count: int, prompt: str, steps: int):
             prompt=(prompt),
             negative_prompt=NEGATIVE_PROMPT,
             num_inference_steps=steps,
-            guidance_scale=1.5,
+            guidance_scale=cfg,
         ).images[0]
 
-        image.save(p / f'{i}.png')
+        path_to_img = p / f'{i}.png'
+        image.save(path_to_img)
+        if pill:
+            pixelate(path_to_img=path_to_img)
 
 
 if __name__ == '__main__':
