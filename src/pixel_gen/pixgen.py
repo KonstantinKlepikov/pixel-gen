@@ -56,6 +56,9 @@ def generate(
     with open(p / 'prompt.txt', 'w') as f:
         f.write(prompt)
 
+    with open(p / model.name, 'a') as f:
+        pass
+
     for i in range(count):
         image = pipe(
             prompt=(prompt),

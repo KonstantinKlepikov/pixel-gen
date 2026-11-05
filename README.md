@@ -36,14 +36,16 @@ virtualenvs.prefer-active-python = true
 
 ## Run
 
-`generate --count=10 -p --prompt="The small agressive robot with tentacles, pixelart"`
+`generate --count=10 -p --model=PARTY --prompt="The small agressive robot with tentacles, pixelart"`
 
-Current used: `stabilityai/stable-diffusion-xl-base-1.0` + `nerijs/pixel-art-xl`. [pixel-art-xl](https://huggingface.co/nerijs/pixel-art-xl).
+Current used:
+
+- `stabilityai/stable-diffusion-xl-base-1.0` + `nerijs/pixel-art-xl`. [pixel-art-xl](https://huggingface.co/nerijs/pixel-art-xl)
+- [Pixel Party XL](https://huggingface.co/pixelparty/pixel-party-xl) This is a full model training for better pixel art adherence based on SDXL. Feel free to use this model for your own projects, but please do not host it. `stabilityai/stable-diffusion-xl-base-1.0` + `nerijs/pixel-party-xl`
 
 ## Research
 
 - [Pixel-art icon model](https://huggingface.co/azyg0s/pixelart-50m) A small text-to-image model that draws 32×32 RGBA pixel-art game icons with transparent backgrounds.
-- [Pixel Party XL](https://huggingface.co/pixelparty/pixel-party-xl) This is a full model training for better pixel art adherence based on SDXL. Feel free to use this model for your own projects, but please do not host it. `stabilityai/stable-diffusion-xl-base-1.0` + `nerijs/pixel-party-xl`
 - [pixel-art-3.5L](https://huggingface.co/nerijs/pixel-art-3.5L) LoRa aimed to produce pixel perfect and grid aligned 128x128 outputs for Stable Diffusion 3.5 Large.
 - [pixelartredmond-1-5v-pixel-art-loras-for-sd-1-5](https://huggingface.co/artificialguybr/pixelartredmond-1-5v-pixel-art-loras-for-sd-1-5)
 - [more models](https://huggingface.co/models?other=pixel+art)
