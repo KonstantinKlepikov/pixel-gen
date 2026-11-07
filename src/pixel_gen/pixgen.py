@@ -16,20 +16,23 @@ class DiffusionModel(Enum):
 
 
 @click.command()
-@click.option('--count', default=1, help='Number of generated images')
-@click.option('--steps', default=8, help='Number of inference steps')
+@click.option('--count', default=1, help='Number of generated images. Default to 1')
+@click.option('--steps', default=8, help='Number of inference steps. Default to 8')
 @click.option(
     '--cfg',
     type=click.FLOAT,
     default=1.5,
-    help='How closely the model follows the prompt. Typically between 5.0 and 12.0',
+    help=(
+        'How closely the model follows the prompt. Typically between 0.0 and 2.0. '
+        'Default to 1.5'
+    ),
 )
 @click.option('-pill', is_flag=True, help='Use PILL pixelating')
 @click.option(
     '--model',
     type=click.Choice(DiffusionModel, case_sensitive=False),
     default=DiffusionModel.ART,
-    help='Available Model',
+    help='Available Model. Default to ART',
 )
 @click.option(
     '--prompt',
