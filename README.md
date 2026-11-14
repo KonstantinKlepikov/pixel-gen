@@ -36,7 +36,7 @@ virtualenvs.prefer-active-python = true
 
 ## Run
 
-`generate --count=10 --steps=20 -p --model=PARTY --prompt="The small agressive robot with tentacles, pixelart"`
+`generate --count=10 --steps=20 -pill --model=PARTY --prompt="The small agressive robot with tentacles, pixelart"`
 
 Flags:
 
