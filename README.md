@@ -36,7 +36,7 @@ virtualenvs.prefer-active-python = true
 
 ## Run
 
-`generate --count=10 --steps=20 -pill --model=PARTY --prompt="The small agressive robot with tentacles, pixelart"`
+`generate --count=10 --steps=20 -pill --simple=12 -rmbg --model=PARTY --prompt="The small agressive robot with tentacles, pixelart"`
 
 Flags:
 
@@ -44,6 +44,8 @@ Flags:
 - `--steps` Number of inference steps. Default to 8
 - `--cfg` How closely the model follows the prompt. Typically between 0.0 and 2.0. Default to 1.5. Default to 1.5
 - `-pill` Use PILL pixelating
+- `-rmbg` Remove background
+- `--simple` Number for PILL simplification pallete. Default to 1 (no changes)
 - `--model` Available Model (ART, PARTY). Default to ART.
 
 Current used:

@@ -3,11 +3,14 @@ from enum import Enum, member
 
 import click
 import torch
+from loguru import logger
 
+from .background import remove_bg
 from .constants import DEST_PATH, NEGATIVE_PROMPT
 from .pill_pixelating import pixelate
 from .pixel_art_xl import get_pipe as art_pipe
 from .pixel_party_xl import get_pipe as party_pipe
+from .simplifying import simplificate
 
 
 class DiffusionModel(Enum):
@@ -28,6 +31,12 @@ class DiffusionModel(Enum):
     ),
 )
 @click.option('-pill', is_flag=True, help='Use PILL pixelating')
+@click.option('-rmbg', is_flag=True, help='Remove background')
+@click.option(
+    '--simple',
+    default=1,
+    help='Number for PILL simplification pallete. Default to 1 (no changes)',
+)
 @click.option(
     '--model',
     type=click.Choice(DiffusionModel, case_sensitive=False),
@@ -46,6 +55,8 @@ def generate(
     prompt: str,
     steps: int,
     pill: bool,
+    simple: int,
+    rmbg: bool,
     cfg: float,
     model: DiffusionModel,
 ):
@@ -56,11 +67,10 @@ def generate(
     p = DEST_PATH / dt
     p.mkdir()
 
-    with open(p / 'prompt.txt', 'w') as f:
-        f.write(prompt)
-
-    with open(p / model.name, 'a') as f:
-        pass
+    logger.add(p / 'gen.log')
+    logger.info(f'Prompt: {prompt}')
+    logger.info(f'Model: {model.name}')
+    logger.info(f'Parameters: {count=}, {steps=}, {pill=}, {simple=}, {cfg=}')
 
     for i in range(count):
         image = pipe(
@@ -72,8 +82,17 @@ def generate(
 
         path_to_img = p / f'{i}.png'
         image.save(path_to_img)
+        logger.info(f'Image {i} on path {path_to_img}')
+
+        if rmbg:
+            path_to_img = remove_bg(path_to_img=path_to_img)
+            logger.info('Background removed')
         if pill:
-            pixelate(path_to_img=path_to_img)
+            path_to_img = pixelate(path_to_img=path_to_img)
+            logger.info('Pixelated')
+        if simple > 1:
+            path_to_img = simplificate(path_to_img=path_to_img, num=simple)
+            logger.info('Simplificated')
 
 
 if __name__ == '__main__':

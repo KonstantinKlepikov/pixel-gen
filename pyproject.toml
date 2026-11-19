@@ -31,6 +31,8 @@ matplotlib = "^3.10.0"
 ftfy = "^6.3.1"
 scipy = "^1.15.0"
 ipykernel = "^6.29.5"
+rembg = {extras = ["cpu"], version = "^2.0.87"}
+loguru = "^0.8.0"
 
 
 [tool.poetry.group.dev.dependencies]
